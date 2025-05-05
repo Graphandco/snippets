@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useTransition } from "react";
 import { deleteSnippet } from "@/actions/snippets";
 import { useRouter } from "next/navigation";
+import { Trash } from "lucide-react";
 
 const SnippetItem = ({ snippet }) => {
 	const router = useRouter();
@@ -60,7 +61,7 @@ const SnippetItem = ({ snippet }) => {
 					onClick={() => handleDelete(snippet.id)}
 					disabled={isPending}
 				>
-					{isPending ? "Suppression..." : "Supprimer"}
+					{isPending ? "Suppression..." : <Trash size={16} />}
 				</Button>
 			</div>
 		</li>

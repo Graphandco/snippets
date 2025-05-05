@@ -1,0 +1,33 @@
+generator client {
+   provider = "prisma-client-js"
+}
+
+datasource db {
+   provider = "sqlite"
+   url      = "file:./dev.db"
+}
+
+model Snippet {
+   id          Int      @id @default(autoincrement())
+   title       String
+   content     String
+   description String?
+   isFavorite  Boolean  @default(false)
+   category    Category @relation(fields: [categoryId], references: [id])
+   categoryId  Int
+   language    Language @relation(fields: [languageId], references: [id])
+   languageId  Int
+   createdAt   DateTime @default(now())
+}
+
+model Category {
+   id       Int       @id @default(autoincrement())
+   name     String    @unique
+   snippets Snippet[]
+}
+
+model Language {
+   id       Int       @id @default(autoincrement())
+   name     String    @unique
+   snippets Snippet[]
+}

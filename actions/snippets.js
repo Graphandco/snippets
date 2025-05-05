@@ -25,3 +25,23 @@ export async function deleteSnippet(formData) {
 
 	revalidatePath("/");
 }
+
+export async function toggleFavorite(formData) {
+	const id = parseInt(formData.get("id"));
+
+	const snippet = await prisma.snippet.findUnique({
+		where: { id },
+		select: { isFavorite: true },
+	});
+
+	if (!snippet) {
+		throw new Error("Snippet not found");
+	}
+
+	await prisma.snippet.update({
+		where: { id },
+		data: { isFavorite: !snippet.isFavorite },
+	});
+
+	revalidatePath("/");
+}

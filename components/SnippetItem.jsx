@@ -6,6 +6,9 @@ import { useTransition } from "react";
 import { deleteSnippet } from "@/actions/snippets";
 import { useRouter } from "next/navigation";
 import { Trash } from "lucide-react";
+import CodeBlock from "./CodeBlock";
+import { Star, StarOff } from "lucide-react";
+import { toggleFavorite } from "@/actions/snippets";
 
 const SnippetItem = ({ snippet }) => {
 	const router = useRouter();
@@ -27,24 +30,19 @@ const SnippetItem = ({ snippet }) => {
 	};
 
 	return (
-		<li
-			key={snippet.id}
-			className="border rounded-lg p-4 shadow-sm bg-white dark:bg-gray-900"
-		>
+		<div className=" p-4 ">
 			<div className="flex justify-between items-start">
-				<div>
-					<h2 className="text-lg font-semibold">{snippet.title}</h2>
+				<div className="grow gap-2">
+					<h2 className="text-lg text-white font-semibold">
+						{snippet.title}
+					</h2>
 					{snippet.description && (
 						<p className="text-sm text-gray-500">
 							{snippet.description}
 						</p>
 					)}
-					{snippet.content && (
-						<p className="text-sm text-gray-500">
-							{snippet.content}
-						</p>
-					)}
-					<p className="text-sm text-gray-400">
+					{snippet.content && <CodeBlock snippet={snippet} />}
+					{/* <p className="text-sm text-gray-400">
 						Catégorie:{" "}
 						<span className="font-medium">
 							{snippet.category.name}
@@ -53,18 +51,41 @@ const SnippetItem = ({ snippet }) => {
 						<span className="font-medium">
 							{snippet.language.name}
 						</span>
-					</p>
+					</p> */}
 				</div>
-				<Button
-					variant="destructive"
-					size="sm"
-					onClick={() => handleDelete(snippet.id)}
-					disabled={isPending}
-				>
-					{isPending ? "Suppression..." : <Trash size={16} />}
-				</Button>
+				<div className="flex ">
+					<form action={toggleFavorite}>
+						<input type="hidden" name="id" value={snippet.id} />
+						<Button
+							variant="ghost"
+							className="text-white cursor-pointer scale-100 hover:scale-110 transition-transform duration-200 px-1!"
+							size="sm"
+							title={
+								snippet.isFavorite
+									? "Retirer des favoris"
+									: "Ajouter aux favoris"
+							}
+						>
+							{snippet.isFavorite ? (
+								<Star size={18} fill="white" />
+							) : (
+								<Star size={18} />
+							)}
+						</Button>
+					</form>
+
+					<Button
+						variant="ghost"
+						className="cursor-pointer scale-100 hover:scale-110 transition-transform duration-200 px-1!"
+						size="sm"
+						onClick={() => handleDelete(snippet.id)}
+						disabled={isPending}
+					>
+						{isPending ? "Suppression..." : <Trash size={18} />}
+					</Button>
+				</div>
 			</div>
-		</li>
+		</div>
 	);
 };
 

@@ -42,7 +42,7 @@ const AddSnippet = () => {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<CirclePlus
-					className="text-white cursor-pointer scale-100 hover:scale-110 transition-transform"
+					className="text-foreground cursor-pointer scale-100 hover:scale-110 hover:text-white transition-all"
 					onClick={() => setOpen(true)}
 				/>
 			</DialogTrigger>

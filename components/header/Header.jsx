@@ -7,7 +7,10 @@ const Header = () => {
 	return (
 		<header className="bg-black/30">
 			<div className="wrapper py-3 flex justify-between items-center">
-				<div className="flex items-center gap-3">
+				<Link
+					href="/"
+					className="flex items-center gap-3 text-white cursor-pointer"
+				>
 					<Image
 						src="/logo.svg"
 						width={30}
@@ -15,17 +18,17 @@ const Header = () => {
 						alt="Logo Graph and Co"
 					/>
 					<div className="text-white font-semibold">Cheat Sheets</div>
-				</div>
+				</Link>
 				<div className="flex items-center gap-3">
 					<Link
 						href="/"
-						className="text-white cursor-pointer scale-100 hover:scale-110 transition-transform"
+						className="text-foreground cursor-pointer scale-100 hover:scale-110 hover:text-white transition-all"
 					>
 						<HomeIcon />
 					</Link>
 					<Link
 						href="/categories"
-						className="text-white cursor-pointer scale-100 hover:scale-110 transition-transform"
+						className="text-foreground cursor-pointer scale-100 hover:scale-110 hover:text-white transition-all"
 					>
 						<Settings />
 					</Link>

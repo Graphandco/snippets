@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSnippets } from "@/contexts/SnippetsContext";
 import SnippetItem from "./SnippetItem";
+import { Folder, Heart } from "lucide-react";
 
 export default function SnippetsList() {
 	const { snippets, categories, languages } = useSnippets();
@@ -26,35 +27,45 @@ export default function SnippetsList() {
 						<li>
 							<Button
 								variant="ghost"
-								className={`w-full justify-start hover:bg-transparent cursor-pointer p-0 ${
+								className={`relative h-auto w-full justify-start hover:bg-transparent cursor-pointer px-0 py-1 before:content-[""] before:absolute before:top-0 before:-left-3 before:h-full before:w-[1px] before:transition-colors ${
 									selectedCategoryId === "favorites"
-										? "text-white font-bold"
-										: "text-foreground"
+										? "text-white font-bold before:bg-white"
+										: "text-white before:bg-white/5"
 								}`}
 								onClick={() =>
 									setSelectedCategoryId("favorites")
 								}
 							>
-								Favoris
+								<span className="flex items-center gap-2">
+									<Heart
+										fill="var(--primary)"
+										color="var(--primary)"
+									/>{" "}
+									Favoris
+								</span>
 							</Button>
 						</li>
-						{categories.map((cat) => (
-							<li key={cat.id}>
-								<Button
-									variant="ghost"
-									className={`w-full justify-start hover:bg-transparent cursor-pointer p-0 ${
-										selectedCategoryId === cat.id
-											? "text-white font-bold"
-											: "text-foreground"
-									}`}
-									onClick={() =>
-										setSelectedCategoryId(cat.id)
-									}
-								>
-									<span>{cat.name}</span>
-								</Button>
-							</li>
-						))}
+						{[...categories]
+							.sort((a, b) => a.name.localeCompare(b.name))
+							.map((cat) => (
+								<li key={cat.id}>
+									<Button
+										variant="ghost"
+										className={`relative h-auto w-full justify-start hover:text-primary hover:bg-transparent cursor-pointer px-0 py-1 before:content-[""] before:absolute before:top-0 before:-left-3 before:h-full before:w-[1px] before:transition-colors ${
+											selectedCategoryId === cat.id
+												? "text-primary font-bold before:bg-white"
+												: "text-foreground before:bg-white/5"
+										}`}
+										onClick={() =>
+											setSelectedCategoryId(cat.id)
+										}
+									>
+										<span className="flex items-center gap-2">
+											<Folder /> {cat.name}
+										</span>
+									</Button>
+								</li>
+							))}
 					</ul>
 				</div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { useTransition } from "react";
 import { deleteSnippet, toggleFavorite } from "@/actions/snippets";
@@ -52,11 +52,20 @@ const SnippetItem = ({ snippet }) => {
 		}
 	};
 
+	const handleCopy = async () => {
+		try {
+			await navigator.clipboard.writeText(snippet.content);
+			toast.success("Code copié !");
+		} catch (err) {
+			console.error("Échec de la copie :", err);
+		}
+	};
+
 	return (
-		<div className="p-4">
-			<div className="flex justify-between items-start">
-				<div className="grow gap-2">
-					<h2 className="text-lg text-white font-semibold">
+		<div className="mb-6 py-2 px-4 bg-black/20 rounded-2xl">
+			<div className="snippet-header flex justify-between items-center gap-2">
+				<div>
+					<h2 className="text-lg text-primary font-semibold">
 						{snippet.title}
 					</h2>
 					{snippet.description && (
@@ -64,39 +73,37 @@ const SnippetItem = ({ snippet }) => {
 							{snippet.description}
 						</p>
 					)}
-					{snippet.content && <CodeBlock snippet={snippet} />}
 				</div>
-				<div className="flex">
-					<Button
-						variant="ghost"
-						className="text-white cursor-pointer scale-100 hover:scale-110 transition-transform duration-200 px-1!"
-						size="sm"
-						title={
-							snippet.isFavorite
-								? "Retirer des favoris"
-								: "Ajouter aux favoris"
-						}
-						onClick={() => handleToggleFavorite(snippet.id)}
-						disabled={isPending}
-					>
-						{snippet.isFavorite ? (
-							<Star size={18} fill="white" />
-						) : (
-							<Star size={18} />
-						)}
-					</Button>
+				<div className="flex items-center gap-2">
+					<Copy
+						size={18}
+						className=" cursor-pointer scale-100 hover:scale-110 transition-all duration-200 hover:text-white"
+						onClick={handleCopy}
+					/>
 
-					<Button
-						variant="ghost"
-						className="cursor-pointer scale-100 hover:scale-110 transition-transform duration-200 px-1!"
-						size="sm"
+					<Star
+						size={18}
+						className="cursor-pointer scale-100 hover:scale-110 transition-all duration-200 hover:text-white"
+						onClick={() => handleToggleFavorite(snippet.id)}
+						fill={`${
+							snippet.isFavorite
+								? "var(--primary)"
+								: "transparent"
+						}`}
+						color={`${
+							snippet.isFavorite
+								? "var(--primary)"
+								: "var(--foreground)"
+						}`}
+					/>
+					<Trash
+						size={18}
+						className="cursor-pointer scale-100 hover:scale-110 transition-all duration-200 hover:text-white"
 						onClick={() => handleDelete(snippet.id)}
-						disabled={isPending}
-					>
-						{isPending ? "Suppression..." : <Trash size={18} />}
-					</Button>
+					/>
 				</div>
 			</div>
+			<div>{snippet.content && <CodeBlock snippet={snippet} />}</div>
 		</div>
 	);
 };

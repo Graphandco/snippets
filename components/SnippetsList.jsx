@@ -5,31 +5,46 @@ import { Button } from "@/components/ui/button";
 import { useSnippets } from "@/contexts/SnippetsContext";
 import SnippetItem from "./SnippetItem";
 import { Folder, Heart } from "lucide-react";
+import { Input } from "./ui/input";
 
 export default function SnippetsList() {
 	const { snippets, categories, languages } = useSnippets();
 	const [selectedCategoryId, setSelectedCategoryId] = useState("favorites");
 	const [selectedSnippetId, setSelectedSnippetId] = useState(null);
+	const [searchText, setSearchText] = useState("");
 
-	const filteredSnippets =
-		selectedCategoryId === "favorites"
-			? snippets.filter((s) => s.isFavorite)
-			: snippets.filter((s) => s.categoryId === selectedCategoryId);
+	const filteredSnippets = searchText.trim()
+		? snippets.filter(
+				(s) =>
+					s.title.toLowerCase().includes(searchText.toLowerCase()) ||
+					s.content.toLowerCase().includes(searchText.toLowerCase())
+		  )
+		: selectedCategoryId === "favorites"
+		? snippets.filter((s) => s.isFavorite)
+		: snippets.filter((s) => s.categoryId === selectedCategoryId);
 
 	const selectedSnippet = snippets.find((s) => s.id === selectedSnippetId);
 
 	return (
 		<>
-			<div className="grid grid-cols-[200px_300px_1fr]">
+			<Input
+				name="search"
+				placeholder="Rechercher..."
+				className="mb-8 pl-2 text-white font-semibold placeholder:text-white/30 placeholder:font-normal border-0 border-b border-white bg-transparent focus-visible:ring-0 focus-visible:border-b-1 focus-visible:border-primary max-w-2xs mx-auto"
+				value={searchText}
+				onChange={(e) => setSearchText(e.target.value)}
+			/>
+
+			<div className="grid grid-cols-[200px_1fr]">
 				{/* Colonne 1 : Catégories + Favoris */}
 				<div className="px-3 border-r border-white/10">
 					<ul className="">
 						<li>
 							<Button
 								variant="ghost"
-								className={`relative h-auto w-full justify-start hover:bg-transparent cursor-pointer px-0 py-1 before:content-[""] before:absolute before:top-0 before:-left-3 before:h-full before:w-[1px] before:transition-colors ${
+								className={`relative h-auto w-full justify-start hover:bg-transparent cursor-pointer px-0 py-2 before:content-[""] before:absolute before:top-0 before:-left-3 before:h-full before:w-[1px] before:transition-colors ${
 									selectedCategoryId === "favorites"
-										? "text-white font-bold before:bg-white"
+										? "text-white font-bold before:bg-primary"
 										: "text-white before:bg-white/5"
 								}`}
 								onClick={() =>
@@ -51,9 +66,9 @@ export default function SnippetsList() {
 								<li key={cat.id}>
 									<Button
 										variant="ghost"
-										className={`relative h-auto w-full justify-start hover:text-primary hover:bg-transparent cursor-pointer px-0 py-1 before:content-[""] before:absolute before:top-0 before:-left-3 before:h-full before:w-[1px] before:transition-colors ${
+										className={`relative h-auto w-full justify-start hover:text-primary hover:bg-transparent cursor-pointer px-0 py-2 before:content-[""] before:absolute before:top-0 before:-left-3 before:h-full before:w-[1px] before:transition-colors ${
 											selectedCategoryId === cat.id
-												? "text-primary font-bold before:bg-white"
+												? "text-primary font-bold before:bg-primary"
 												: "text-foreground before:bg-white/5"
 										}`}
 										onClick={() =>
@@ -70,8 +85,7 @@ export default function SnippetsList() {
 				</div>
 
 				{/* Colonne 2 : Liste des snippets */}
-				<div className="px-3 border-r border-white/10">
-					{/* <div className="text-2xl">Catégories</div> */}
+				{/* <div className="px-3 border-r border-white/10">
 					{filteredSnippets.length === 0 ? (
 						<p className="text-gray-500 text-sm">
 							Aucun snippet pour cette catégorie.
@@ -97,18 +111,22 @@ export default function SnippetsList() {
 							))}
 						</ul>
 					)}
-				</div>
+				</div> */}
 
 				{/* Colonne 3 : Détail du snippet */}
 
-				<div className="px-3">
-					{selectedSnippet ? (
+				<div className="pl-6">
+					{filteredSnippets.map((snippet) => (
+						<SnippetItem key={snippet.id} snippet={snippet} />
+					))}
+
+					{/* {selectedSnippet ? (
 						<SnippetItem snippet={selectedSnippet} />
 					) : (
 						<p className="text-gray-500 text-sm">
 							Sélectionnez un snippet pour voir les détails.
 						</p>
-					)}
+					)} */}
 				</div>
 			</div>
 		</>

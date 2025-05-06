@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSnippets } from "@/contexts/SnippetsContext";
-import AddSnippet from "./AddSnippet";
 import SnippetItem from "./SnippetItem";
 
 export default function SnippetsList() {
@@ -101,7 +100,6 @@ export default function SnippetsList() {
 					)}
 				</div>
 			</div>
-			<AddSnippet />
 		</>
 	);
 }

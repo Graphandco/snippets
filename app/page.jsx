@@ -11,9 +11,7 @@ export default async function Page() {
 	const languages = await prisma.language.findMany();
 
 	return (
-		<div className="container mx-auto p-4 space-y-6">
-			<h1 className="text-3xl font-bold">Gestion des Snippets</h1>
-
+		<div className="wrapper mt-8">
 			<SnippetsList
 				snippets={snippets}
 				categories={categories}

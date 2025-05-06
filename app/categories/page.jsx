@@ -5,7 +5,6 @@ import { addCategory, deleteCategory } from "@/actions/categories";
 import { addLanguage, deleteLanguage } from "@/actions/languages";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrashIcon } from "lucide-react";
 import { useSnippets } from "@/contexts/SnippetsContext";
 import { toast } from "sonner";
@@ -73,86 +72,66 @@ export default function CategoriesLanguagesPage() {
 	};
 
 	return (
-		<div className="max-w-3xl mx-auto p-6 space-y-8">
+		<div className="wrapper mt-8 max-w-2xl">
 			{/* Catégories */}
-			<Card>
-				<CardHeader>
-					<CardTitle>Catégories</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<ul className="space-y-2">
-						{categories.map((c) => (
-							<li
-								key={c.id}
-								className="flex items-center justify-between border rounded-lg px-3 py-2 bg-black"
-							>
-								<span>{c.name}</span>
-								<Button
-									variant="destructive"
-									size="sm"
-									onClick={() => handleDeleteCategory(c.id)}
-								>
-									<TrashIcon size={16} />
-								</Button>
-							</li>
-						))}
-					</ul>
-
-					<form
-						onSubmit={handleAddCategory}
-						className="mt-4 flex gap-2"
+			<div className="text-2xl text-white font-semibold">Catégories</div>
+			<form onSubmit={handleAddCategory} className="my-4 flex gap-2">
+				<Input
+					name="name"
+					placeholder="Nouvelle catégorie"
+					required
+					value={categoryInput}
+					onChange={(e) => setCategoryInput(e.target.value)}
+				/>
+				<Button type="submit">Ajouter</Button>
+			</form>
+			<ul className="space-y-2">
+				{categories.map((c) => (
+					<li
+						key={c.id}
+						className="flex items-center justify-between "
 					>
-						<Input
-							name="name"
-							placeholder="Nouvelle catégorie"
-							required
-							value={categoryInput}
-							onChange={(e) => setCategoryInput(e.target.value)}
+						<span>{c.name}</span>
+						<TrashIcon
+							size={16}
+							className="text-red-500 cursor-pointer hover:text-red-700 transition-colors"
+							onClick={() => handleDeleteCategory(c.id)}
 						/>
-						<Button type="submit">Ajouter</Button>
-					</form>
-				</CardContent>
-			</Card>
+					</li>
+				))}
+			</ul>
 
 			{/* Langages */}
-			<Card>
-				<CardHeader>
-					<CardTitle>Langages</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<ul className="space-y-2">
-						{languages.map((l) => (
-							<li
-								key={l.id}
-								className="flex items-center justify-between border rounded-lg px-3 py-2 bg-gray-50 dark:bg-gray-900"
-							>
-								<span>{l.name}</span>
-								<Button
-									variant="destructive"
-									size="sm"
-									onClick={() => handleDeleteLanguage(l.id)}
-								>
-									<TrashIcon size={16} />
-								</Button>
-							</li>
-						))}
-					</ul>
+			<div className="text-2xl text-white font-semibold mt-8">
+				Langages
+			</div>
 
-					<form
-						onSubmit={handleAddLanguage}
-						className="mt-4 flex gap-2"
+			<form onSubmit={handleAddLanguage} className="my-4 flex gap-2">
+				<Input
+					name="name"
+					placeholder="Nouveau langage"
+					required
+					value={languageInput}
+					onChange={(e) => setLanguageInput(e.target.value)}
+				/>
+				<Button type="submit">Ajouter</Button>
+			</form>
+			<ul className="space-y-2">
+				{languages.map((l) => (
+					<li
+						key={l.id}
+						className="flex items-center justify-between  "
 					>
-						<Input
-							name="name"
-							placeholder="Nouveau langage"
-							required
-							value={languageInput}
-							onChange={(e) => setLanguageInput(e.target.value)}
+						<span>{l.name}</span>
+
+						<TrashIcon
+							size={16}
+							className="text-red-500 cursor-pointer hover:text-red-700 transition-colors"
+							onClick={() => handleDeleteLanguage(l.id)}
 						/>
-						<Button type="submit">Ajouter</Button>
-					</form>
-				</CardContent>
-			</Card>
+					</li>
+				))}
+			</ul>
 		</div>
 	);
 }

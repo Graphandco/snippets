@@ -1,10 +1,7 @@
-// actions/languages.js
 "use server";
 
-import prisma from "../lib/prisma";
-import { revalidatePath } from "next/cache";
+import prisma from "@/lib/prisma";
 
-// Action pour ajouter un langage
 export async function addLanguage(formData) {
 	const name = formData.get("name");
 
@@ -12,14 +9,10 @@ export async function addLanguage(formData) {
 		throw new Error("Le nom du langage est requis.");
 	}
 
-	await prisma.language.create({
-		data: { name },
-	});
-
-	revalidatePath("/categories"); // Revalider la page des catégories après ajout
+	const newLanguage = await prisma.language.create({ data: { name } });
+	return newLanguage; // ✅ retourne le langage créé
 }
 
-// Action pour supprimer un langage
 export async function deleteLanguage(formData) {
 	const id = parseInt(formData.get("id"));
 
@@ -27,9 +20,6 @@ export async function deleteLanguage(formData) {
 		throw new Error("ID invalide.");
 	}
 
-	await prisma.language.delete({
-		where: { id },
-	});
-
-	revalidatePath("/categories"); // Revalider la page des catégories après suppression
+	const deletedLanguage = await prisma.language.delete({ where: { id } });
+	return deletedLanguage; // ✅ retourne le langage supprimé
 }

@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "../lib/prisma";
+import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function addSnippet(formData) {
@@ -10,20 +10,21 @@ export async function addSnippet(formData) {
 	const categoryId = parseInt(formData.get("categoryId"));
 	const languageId = parseInt(formData.get("languageId"));
 
-	await prisma.snippet.create({
+	const snippet = await prisma.snippet.create({
 		data: { title, content, description, categoryId, languageId },
+		include: { category: true, language: true },
 	});
 
-	revalidatePath("/");
+	return snippet;
 }
 
 export async function deleteSnippet(formData) {
 	const id = parseInt(formData.get("id"));
-	await prisma.snippet.delete({
+	const deletedSnippet = await prisma.snippet.delete({
 		where: { id },
 	});
 
-	revalidatePath("/");
+	return deletedSnippet;
 }
 
 export async function toggleFavorite(formData) {
@@ -38,10 +39,11 @@ export async function toggleFavorite(formData) {
 		throw new Error("Snippet not found");
 	}
 
-	await prisma.snippet.update({
+	const updatedSnippet = await prisma.snippet.update({
 		where: { id },
 		data: { isFavorite: !snippet.isFavorite },
+		include: { category: true, language: true },
 	});
 
-	revalidatePath("/");
+	return updatedSnippet;
 }

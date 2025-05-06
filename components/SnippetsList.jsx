@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useSnippets } from "@/contexts/SnippetsContext";
 import AddSnippet from "./AddSnippet";
 import SnippetItem from "./SnippetItem";
 
-export default function SnippetsList({ snippets, categories, languages }) {
+export default function SnippetsList() {
+	const { snippets, categories, languages } = useSnippets();
 	const [selectedCategoryId, setSelectedCategoryId] = useState("favorites");
 	const [selectedSnippetId, setSelectedSnippetId] = useState(null);
 
@@ -99,7 +101,7 @@ export default function SnippetsList({ snippets, categories, languages }) {
 					)}
 				</div>
 			</div>
-			<AddSnippet categories={categories} languages={languages} />
+			<AddSnippet />
 		</>
 	);
 }

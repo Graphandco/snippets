@@ -14,37 +14,37 @@ import {
 	DialogClose,
 } from "@/components/ui/dialog";
 import { addSnippet } from "../actions/snippets";
+import { useSnippets } from "@/contexts/SnippetsContext";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { CirclePlus } from "lucide-react";
 
-const AddSnippet = ({ categories, languages }) => {
+const AddSnippet = () => {
+	const { setSnippets, categories, languages } = useSnippets();
 	const [open, setOpen] = useState(false);
 	const router = useRouter();
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		const formData = new FormData(e.target);
+	async function handleSubmit(event) {
+		event.preventDefault();
+		const formData = new FormData(event.target);
 
-		try {
-			await addSnippet(formData);
-			toast.success("Snippet ajouté !");
-			setOpen(false);
-			startTransition(() => {
-				router.refresh();
-			});
-		} catch (err) {
-			console.error(err);
-			toast.error("Erreur lors de l'ajout du snippet");
-		}
-	};
+		const newSnippet = await addSnippet(formData);
+		setSnippets((prev) => [newSnippet, ...prev]);
+		toast.success("Snippet ajouté !");
+		setOpen(false);
+		startTransition(() => {
+			router.refresh();
+		});
+	}
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant="outline" onClick={() => setOpen(true)}>
-					Add
-				</Button>
+				<CirclePlus
+					className="text-white cursor-pointer scale-100 hover:scale-110 transition-transform"
+					onClick={() => setOpen(true)}
+				/>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>

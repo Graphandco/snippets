@@ -1,0 +1,51 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "_prisma_migrations" (
+    "id"                    TEXT PRIMARY KEY NOT NULL,
+    "checksum"              TEXT NOT NULL,
+    "finished_at"           DATETIME,
+    "migration_name"        TEXT NOT NULL,
+    "logs"                  TEXT,
+    "rolled_back_at"        DATETIME,
+    "started_at"            DATETIME NOT NULL DEFAULT current_timestamp,
+    "applied_steps_count"   INTEGER UNSIGNED NOT NULL DEFAULT 0
+);
+INSERT INTO _prisma_migrations VALUES('eec92cc5-40ff-4e7d-8e0d-e6ce6437a909','ebfed8e872544a8c6af7b84710d9565d0b8de49c8dbb0c307e302985a016fc90',1746466093220,'20250505172813_init',NULL,NULL,1746466093218,1);
+INSERT INTO _prisma_migrations VALUES('7c934a42-f06a-46b0-9a21-9f69d75e7fe8','f323db9d5f3273110f3d38bdc0580a910dc5a66a1ed6d2f4a56b7247e49190df',1746467723374,'20250505175523_add_description_to_snippet',NULL,NULL,1746467723373,1);
+CREATE TABLE IF NOT EXISTS "Snippet" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "isFavorite" BOOLEAN NOT NULL DEFAULT false,
+    "categoryId" INTEGER NOT NULL,
+    "languageId" INTEGER NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, "description" TEXT,
+    CONSTRAINT "Snippet_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Snippet_languageId_fkey" FOREIGN KEY ("languageId") REFERENCES "Language" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+INSERT INTO Snippet VALUES(8,'hiughi','hbhjkbhbhjkbkjbjkbkjbhjkbh',0,1,1,1746469842278,'hgbgb');
+INSERT INTO Snippet VALUES(10,'regregr','rgreg',0,1,1,1746470118823,'gregr');
+INSERT INTO Snippet VALUES(12,'Test CSS',replace(replace('.test {\r\n   color: white;\r\n   background-color: var(--color-primary);\r\n   border-radius: var(--radius-lg);\r\n   padding: 1rem;\r\n   box-shadow: 0 0 10px var(--color-ring);\r\n   transition: all 0.3s ease;\r\n}','\r',char(13)),'\n',char(10)),1,4,2,1746477117772,'Description du test');
+INSERT INTO Snippet VALUES(13,'Production - Connexion','ssh johnsteel_admin@51.91.221.80 -p 44673',0,5,1,1746479458778,'');
+INSERT INTO Snippet VALUES(14,'Limiter le nombre de lignes',replace(replace('.text {\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n    display: -webkit-box;\r\n    -webkit-line-clamp: 2; /* nombre de lignes à afficher */\r\n    line-clamp: 2;\r\n    -webkit-box-orient: vertical;\r\n}','\r',char(13)),'\n',char(10)),0,4,2,1746537304855,'');
+CREATE TABLE IF NOT EXISTS "Category" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL
+);
+INSERT INTO Category VALUES(1,'Debian');
+INSERT INTO Category VALUES(3,'GIT');
+INSERT INTO Category VALUES(4,'CSS');
+INSERT INTO Category VALUES(5,'John Steel');
+CREATE TABLE IF NOT EXISTS "Language" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL
+);
+INSERT INTO Language VALUES(1,'Bash');
+INSERT INTO Language VALUES(2,'CSS');
+DELETE FROM sqlite_sequence;
+INSERT INTO sqlite_sequence VALUES('Category',5);
+INSERT INTO sqlite_sequence VALUES('Language',2);
+INSERT INTO sqlite_sequence VALUES('Snippet',14);
+CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");
+CREATE UNIQUE INDEX "Language_name_key" ON "Language"("name");
+COMMIT;

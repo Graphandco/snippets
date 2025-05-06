@@ -44,7 +44,7 @@
 }
 
 :root {
-	--background: hsl(230.53 18% 17%);
+	--background: hsl(232 20% 10%);
 	--foreground: hsl(229.73 20% 70%);
 	--card: oklch(0.205 0 0);
 	--card-foreground: oklch(0.985 0 0);
@@ -84,4 +84,9 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+}
+
+.wrapper {
+	padding-inline: 5vw;
+	margin: auto;
 }

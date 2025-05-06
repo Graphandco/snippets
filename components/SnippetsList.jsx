@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AddSnippet from "./AddSnippet";
 import SnippetItem from "./SnippetItem";
 
@@ -19,19 +18,18 @@ export default function SnippetsList({ snippets, categories, languages }) {
 
 	return (
 		<>
-			<div className="grid grid-cols-[auto_auto_1fr]">
+			<div className="grid grid-cols-[200px_300px_1fr]">
 				{/* Colonne 1 : Catégories + Favoris */}
 				<div className="px-3 border-r border-white/10">
-					<div className="text-2xl">Catégories</div>
 					<ul className="">
 						<li>
 							<Button
-								variant={
+								variant="ghost"
+								className={`w-full justify-start hover:bg-transparent cursor-pointer p-0 ${
 									selectedCategoryId === "favorites"
-										? "default"
-										: "outline"
-								}
-								className="w-full justify-start"
+										? "text-white font-bold"
+										: "text-foreground"
+								}`}
 								onClick={() =>
 									setSelectedCategoryId("favorites")
 								}
@@ -43,7 +41,7 @@ export default function SnippetsList({ snippets, categories, languages }) {
 							<li key={cat.id}>
 								<Button
 									variant="ghost"
-									className={`w-full justify-start hover:bg-transparent cursor-pointer py-0 ${
+									className={`w-full justify-start hover:bg-transparent cursor-pointer p-0 ${
 										selectedCategoryId === cat.id
 											? "text-white font-bold"
 											: "text-foreground"
@@ -71,12 +69,12 @@ export default function SnippetsList({ snippets, categories, languages }) {
 							{filteredSnippets.map((snippet) => (
 								<li key={snippet.id}>
 									<Button
-										variant={
+										variant="ghost"
+										className={`w-full justify-start hover:bg-transparent cursor-pointer p-0 ${
 											selectedSnippetId === snippet.id
-												? "default"
-												: "outline"
-										}
-										className="w-full justify-start text-left"
+												? "text-white font-bold"
+												: "text-foreground"
+										}`}
 										onClick={() =>
 											setSelectedSnippetId(snippet.id)
 										}
@@ -91,7 +89,7 @@ export default function SnippetsList({ snippets, categories, languages }) {
 
 				{/* Colonne 3 : Détail du snippet */}
 
-				<div>
+				<div className="px-3">
 					{selectedSnippet ? (
 						<SnippetItem snippet={selectedSnippet} />
 					) : (

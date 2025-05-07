@@ -5,6 +5,9 @@ import Header from "@/components/header/Header";
 import prisma from "@/lib/prisma";
 import { SnippetsProvider } from "@/contexts/SnippetsContext";
 
+import { ClerkProvider } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+
 const geistSans = Geist({
 	variable: "--font-geist-sans",
 	subsets: ["latin"],
@@ -21,6 +24,10 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+	const { userId, redirectToSignIn } = await auth();
+	// if (!userId) return <div>Pas connecté</div>;
+	if (!userId) return redirectToSignIn();
+
 	const snippets = await prisma.snippet.findMany({
 		include: {
 			category: true,
@@ -32,20 +39,23 @@ export default async function RootLayout({ children }) {
 	const languages = await prisma.language.findMany();
 
 	return (
-		<html lang="en">
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-			>
-				<SnippetsProvider
-					initialSnippets={snippets}
-					initialCategories={categories}
-					initialLanguages={languages}
+		<ClerkProvider>
+			<html lang="en">
+				<body
+					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 				>
-					<Header />
-					<main>{children}</main>
-				</SnippetsProvider>
-				<Toaster />
-			</body>
-		</html>
+					<SnippetsProvider
+						initialSnippets={snippets}
+						initialCategories={categories}
+						initialLanguages={languages}
+					>
+						<Header />
+
+						<main>{children}</main>
+					</SnippetsProvider>
+					<Toaster />
+				</body>
+			</html>
+		</ClerkProvider>
 	);
 }

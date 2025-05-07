@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import AddSnippet from "../AddSnippet";
 import { HomeIcon, Settings } from "lucide-react";

@@ -4,7 +4,7 @@ import SnippetsList from "../components/SnippetsList";
 export default async function Page() {
 	const snippets = await prisma.snippet.findMany({
 		include: { category: true, language: true },
-		orderBy: { createdAt: "desc" },
+		orderBy: { createdAt: "asc" },
 	});
 
 	const categories = await prisma.category.findMany();
